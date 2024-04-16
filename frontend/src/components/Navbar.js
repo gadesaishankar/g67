@@ -1,23 +1,33 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
+
+
 const Navbar = () => {
 
     const [logout, setlogout] = useState("");
 
 
-    const handleOnClick = () => {
+
+    const handleOnClickLogout = () => {
         setlogout(window.location.href = "./");
 
     };
-    const customPrimaryColor = '#01042c';
-    const customSecondaryColor = '#fbf1fb';
+
+
+
+    const customPrimaryColor = '#020135';
+    const customSecondaryColor = '#ffffff';
+    const custom3rdColor = '#f4cd0b';
+
 
 
     return (
         <>
 
-            <nav className="navbar bg-dark border-bottom border-body navbar-expand-lg" style={{ backgroundColor: customPrimaryColor }} >
+
+
+            <nav className="navbar  border-bottom border-body navbar-expand-lg" style={{ backgroundColor: customPrimaryColor }}>
                 <div className="container-fluid">
                     {/* <Link to="/"> */}
                     <a className="navbar-brand " href="#" style={{ color: customSecondaryColor }}>
@@ -35,7 +45,7 @@ const Navbar = () => {
 
                         <ul className="navbar-nav">
 
-                            <li className="nav-item pe-3 ">
+                            {/* <li className="nav-item pe-3 ">
                                 <Link to='/video'>
                                     <button className="btn btn-outline-success font-monospace">Upload Video</button>
                                 </Link>
@@ -45,19 +55,19 @@ const Navbar = () => {
                                 <Link to='/pdf'>
                                     <button className="btn btn-outline-success font-monospace">Upload PDF</button>
                                 </Link>
-                            </li>
+                            </li> */}
                             <li className="nav-item pe-3">
-                                <button className="btn btn-outline-danger font-monospace" onClick={handleOnClick}>LogOut</button>
-                                
+                                <button className="btn btn- font-monospace" style={{ backgroundColor: custom3rdColor }} onClick={handleOnClickLogout}>LogOut</button>
+
                             </li>
                             <li className="nav-item pe-3">
                                 <button className="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" className="bi bi-person-fill" viewBox="0 0 16 16">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill={customSecondaryColor} className="bi bi-person-fill" viewBox="0 0 16 16">
                                         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
                                     </svg>
                                 </button>
                             </li>
-
 
                         </ul>
 
