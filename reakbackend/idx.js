@@ -8,7 +8,7 @@ app.use(cors());
 const mediaRoutes = require("./routes/media");
 
 app.use("/api/v1/media", mediaRoutes);
-app.use("/public", express.static(path.join(__dirname, "public")));
+app.use("/public", express.static(path.join(__dirname,   "public")));
 
 const mongodbUri =   "mongodb+srv://ARUN:1234@cluster0.mmyigrp.mongodb.net/LECTURESCHECK?retryWrites=true&w=majority&appName=Cluster0";
 

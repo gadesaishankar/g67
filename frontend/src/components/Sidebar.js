@@ -1,7 +1,6 @@
 // Sidebar.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import FileUpload from './FileUpload';
 import "./Sidebar.css";
 
 
@@ -25,18 +24,12 @@ const Sidebar = () => {
                      <a href='/UploadVideo'>
                         <button className="btn btn-dark font-monospace">Upload Video</button>
                     </a>
-                        
-                   
 
                 </li>
                 <li className="nav-item pe-3 ">
-                    <Link to='/FileUpload'>
+                    <Link to='/UploadPDF'>
                         <button className="btn btn-dark font-monospace">Upload PDF</button>
                     </Link>
-
-                    <li class="nav-item link">
-                        <Link class="nav-link col" to="/FAQ">FAQS</Link>
-                    </li>
                 </li>
             </ul>
         </div>
@@ -45,3 +38,22 @@ const Sidebar = () => {
 
 export default Sidebar;
 
+
+// import React from "react";
+// import "./Sidebar.css";
+
+
+
+
+// const Sidebar = () => { 
+//     return ( 
+//         <div className="sidebar">
+//             <a href="/home" >Home</a>
+            
+//         </div>
+
+           
+//      );
+// }
+ 
+// export default Sidebar;
