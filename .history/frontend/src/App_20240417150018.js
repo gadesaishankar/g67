@@ -3,7 +3,7 @@ import './App.css';
 import {Routes, Route} from "react-router-dom";
 import LoginForm from './components/LoginForm';
 import Home from './components/Home';
-import FileUpload from './components/FileUpload';
+import FileUpload from ./components
 
 
 
@@ -16,7 +16,7 @@ function App() {
       <Routes>
         <Route path='/' element={<LoginForm/>}/>
         <Route path='/home' element={<Home/>}/>
-        <Route path='/FileUpload' element={<FileUpload/>}/>
+        
         
       </Routes>
     </div>

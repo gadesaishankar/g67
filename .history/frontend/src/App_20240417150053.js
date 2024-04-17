@@ -16,7 +16,7 @@ function App() {
       <Routes>
         <Route path='/' element={<LoginForm/>}/>
         <Route path='/home' element={<Home/>}/>
-        <Route path='/FileUpload' element={<FileUpload/>}/>
+        <Route path='/FileUpload' element={<FileUpload}
         
       </Routes>
     </div>

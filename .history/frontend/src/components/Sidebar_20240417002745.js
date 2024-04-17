@@ -33,10 +33,6 @@ const Sidebar = () => {
                     <Link to='/FileUpload'>
                         <button className="btn btn-dark font-monospace">Upload PDF</button>
                     </Link>
-
-                    <li class="nav-item link">
-                        <Link class="nav-link col" to="/FAQ">FAQS</Link>
-                    </li>
                 </li>
             </ul>
         </div>
@@ -45,3 +41,22 @@ const Sidebar = () => {
 
 export default Sidebar;
 
+
+// import React from "react";
+// import "./Sidebar.css";
+
+
+
+
+// const Sidebar = () => { 
+//     return ( 
+//         <div className="sidebar">
+//             <a href="/home" >Home</a>
+            
+//         </div>
+
+           
+//      );
+// }
+ 
+// export default Sidebar;
