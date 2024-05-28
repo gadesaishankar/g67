@@ -12,11 +12,13 @@ app.use(express.json());
 app.use(cors({credentials:true, origin:'http://localhost:3000'}));
 
 app.use("/api",allroutes);
-app.use((req,res)=>{
-    console.log("Request received at"+(new Date()));
+/////////////api////////////////
+app.use("/", async (req, res) => {
     res.send("wellcome to dune university");
 });
 
+
+/////////////mongo connection/////////////////////
 let db = async()=>
 {
     try{
