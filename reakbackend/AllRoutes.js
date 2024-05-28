@@ -10,7 +10,7 @@ allroutes.use("/files", express.static("files"));
 
 
 
-const stripe = require('stripe')('sk_test_51OyWO6SJGEZiRddbJFJoHBmjW01s9nmVgYhNQjzrkbyNK009QZV5yE3OHNnnwe5yOHChfTXBvg2lTlNp0FHdeiU7005IyYjaA2');
+
 allroutes.get('/', (req, res) => {
     console.log(" reached root");
     res.send("wellcome to dune lms");
