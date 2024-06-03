@@ -101,6 +101,53 @@ allroutes.get("/getfiles", async (req, res) => {
 });
 
 
+//////////////////video upload//////////////
+
+const Uploadstorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './videos');
+        console.log("u reached backend video file");
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now();
+        cb(null, uniqueSuffix + file.originalname);
+        console.log("you reacedbackend video file");
+
+    },
+})
+
+const Upload = multer({ storage: Uploadstorage });
+allroutes.post("/Uploadvideos", Upload.single("file"), async (req, res) => {
+
+    console.log(req.file);
+    const title = req.body.title;
+    const fileName = req.file.filename;
+    try {
+        await Video.create({
+            title: title,
+            video: fileName
+        });
+        res.json({ status: "ok" })
+    } catch (error) {
+        console.error("Error Uploading file:", error);
+        res.status(500).json({ status: "error", message: "Failed to upload file" });
+    }
+
+});
+
+allroutes.get("/getvideos", async (req, res) => {
+    try {
+        Video.find({}).then((data) => {
+            res.send({ status: "ok", data: data });
+        });
+
+    } catch (error) {
+
+    }
+});
+
+
+
 
 
 

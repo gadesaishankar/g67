@@ -20,7 +20,7 @@ const Sidebar = () => {
                         <a href="#">UNIT 3</a>
                     </div>
                 </li>
-                <li className="nav-item pe-3 ">
+                {/* <li className="nav-item pe-3 ">
                      <a href='/UploadVideo'>
                         <button className="btn btn-dark font-monospace">Upload Video</button>
                     </a>
@@ -30,7 +30,7 @@ const Sidebar = () => {
                     <Link to='/UploadPDF'>
                         <button className="btn btn-dark font-monospace">Upload PDF</button>
                     </Link>
-                </li>
+                </li> */}
             </ul>
         </div>
     );
