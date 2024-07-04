@@ -1,0 +1,12 @@
+/* styles.css */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.home.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* Add other styles as needed */
