@@ -1,5 +1,21 @@
-.custom-navbar {
+.custom-navbar{
     width: 100%;
     overflow-x: hidden;
     margin-left: 0;
+    .navbar-toggler {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem 0.75rem;
+    }
+    
+    /* Styles for navbar toggler icon */
+    .navbar-toggler-icon {
+        width: 1.5em;
+        height: 1.5em;
+        background-image: url('/public/logo192.png'); /* Change this to the path of your icon */
+        background-repeat: no-repeat;
+        background-size: contain;
+    }   
 }
+

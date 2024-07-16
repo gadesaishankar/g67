@@ -2,11 +2,11 @@ import React from "react";
 import { useState } from "react";
 import Navbar from "../../Navbar";
 import "../../css/subjects.css";
-import Unit1 from "../../units/Unit1";
-import Unit2 from "../../units/Unit2";
-import Unit3 from "../../units/Unit3";
-import Unit4 from "../../units/Unit4";
-import Unit5 from "../../units/Unit5";
+import Unit1 from "../../Units/Unit1";
+import Unit2 from "../../Units/Unit2";
+import Unit3 from "../../Units/Unit3";
+import Unit4 from "../../Units/Unit4";
+import Unit5 from "../../Units/Unit5";
 const COA = () => {
    const [currentPage,setCurrentPage] = useState(0);
 

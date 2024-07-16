@@ -1,98 +1,106 @@
 // import { useState, useEffect } from "react";
-// import Navbar from "./Navbar";
-// import Sidebar from "./Sidebar";
-// import "./css/Uploadpdf.css";
 // import axios from "axios";
-
+// import "./css/Uploadpdf.css";
 
 // const UploadPDF = () => {
-//     const [title, setTitle] = useState('');
-//     const [file, setFile] = useState('');
-//     const [allImage, setAllImage] = useState(null);
+//   const [title, setTitle] = useState("");
+//   const [file, setFile] = useState("");
+//   const [allImage, setAllImage] = useState(null);
 
+//   useEffect(() => {
+//     getPdf();
+//   }, []);
 
-//     useEffect(() => {
+//   const getPdf = async () => {
+//     try {
+//       const result = await axios.get("http://localhost:5000/api/getfiles");
+//       console.log(result.data.data);
+//       setAllImage(result.data.data);
+//     } catch (error) {
+//       console.error("Error fetching PDFs:", error);
+//       alert("Error fetching PDFs");
+//     }
+//   };
+
+//   const submitImage = async (e) => {
+//     e.preventDefault();
+//     const formData = new FormData();
+//     formData.append("title", title);
+//     formData.append("file", file);
+//     console.log(title, file);
+//     console.log("pdf is uploading");
+//     try {
+//       const result = await axios.post("http://localhost:5000/api/uploadfiles", formData, {
+//         headers: { "Content-Type": "multipart/form-data" },
+//       });
+//       console.log("pdf is uploaded");
+//       console.log(result);
+
+//       if (result.data.status === "ok") {
+//         alert("Uploaded Successfully!!!");
 //         getPdf();
-//     }, []);
-
-//     const getPdf = async () => {
-//         const result = await axios.get("http://localhost:5000/api/getfiles");
-//         console.log(result.data.data);
-//         setAllImage(result.data.data);
-
+//       }
+//     } catch (error) {
+//       console.error("Error uploading PDF:", error);
+//       alert("Error uploading PDF");
 //     }
+//   };
 
-//     const submitImage = async (e) => {
-//         e.preventDefault();
-//         const formdata = new FormData();
-//         formdata.append("title", title);
-//         formdata.append("file", file);
-//         console.log(title, file);
-//         console.log("hey")
-//         const result = await axios.post("http://localhost:5000/api/uploadfiles", formdata, { headers: { "Content-Type": "multipart/form-data" }, });
-//         console.log("hi");
-//         console.log(result);
+//   const showPdf = (pdf) => {
+//     window.open(`http://localhost:5000/api/files/${pdf}`, "_blank", "noreferrer");
+//   };
 
-
-//         if (result.data.status === "ok") {
-//             alert("Uploaded Successfully!!!");
-
-//             getPdf();
-//         }
-//     };
-
-//     const showPdf = (pdf) => {
-//         window.open(`http://localhost:5000/api/files/${pdf}`, "_blank", "noreferrer");
-//     }
-
-
-
-
-
-
-//     return (
-//         <>
-//             <Navbar />
-//             <Sidebar />
-//             <div className="uploadpdf" >
-//                 <form className="pdfform" onSubmit={submitImage}>
-//                     <h4>Upload PDF</h4>
-//                     <label htmlFor="title">Title:</label>
-
-//                     <input type="text" className="form-control pt-2 mt-2 " onChange={(e) => setTitle(e.target.value)} placeholder="Title" id="title" required />
-//                     <input type="file" className="form-control mt-4" id="file" accept="application/pdf" required onChange={(e) => setFile(e.target.files[0])} />
-
-//                     <button className="btn btn-dark mt-3" type="submit">
-//                         Submit
-//                     </button>
-
-//                 </form>
-//                 <div className="uploaded">
-//                     <h4>Uploaded PDF:</h4>
-//                     <div className="output-div">
-//                         {allImage == null ? "" : allImage.map((data) => {
-//                             return (
-//                                 <div className="inner-div">
-//                                     <h6>Titile: {data.title}</h6>
-//                                     <button className="btn btn-dark" onClick={() => showPdf(data.pdf)}>Show Pdf</button>
-//                                 </div>
-
-//                             );
-//                         })}
-
+//   return (
+//     <>
+//       <div className="uploadpdf">
+//         <form className="pdfform" onSubmit={submitImage}>
+//           <h4>Upload PDF</h4>
+//           <label htmlFor="title">Title:</label>
+//           <input
+//             type="text"
+//             className="form-control pt-2 mt-2"
+//             onChange={(e) => setTitle(e.target.value)}
+//             placeholder="Title"
+//             id="title"
+//             required
+//           />
+//           <input
+//             type="file"
+//             className="form-control mt-4"
+//             id="file"
+//             accept="application/pdf"
+//             required
+//             onChange={(e) => setFile(e.target.files[0])}
+//           />
+//           <button className="btn btn-dark mt-3" type="submit">
+//             Submit
+//           </button>
+//         </form>
+//         <div className="uploaded">
+//           <h4>Uploaded PDF:</h4>
+//           <div className="output-div">
+//             {allImage == null
+//               ? ""
+//               : allImage.map((data) => {
+//                   return (
+//                     <div className="inner-div" key={data._id}>
+//                       <h6>Title: {data.title}</h6>
+//                       <button className="btn btn-dark" onClick={() => showPdf(data.pdf)}>
+//                         Show Pdf
+//                       </button>
 //                     </div>
-//                 </div>
-
-
-
-
-//             </div>
-//         </>
-//     );
-// }
+//                   );
+//                 })}
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
 
 // export default UploadPDF;
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 import axios from "axios";
 import "./css/Uploadpdf.css";
 
@@ -100,6 +108,7 @@ const UploadPDF = () => {
   const [title, setTitle] = useState("");
   const [file, setFile] = useState("");
   const [allImage, setAllImage] = useState(null);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     getPdf();
@@ -144,6 +153,10 @@ const UploadPDF = () => {
     window.open(`http://localhost:5000/api/files/${pdf}`, "_blank", "noreferrer");
   };
 
+  const navigateToGraph = () => {
+    navigate("/RelevanceChart");
+  };
+
   return (
     <>
       <div className="uploadpdf">
@@ -169,8 +182,11 @@ const UploadPDF = () => {
           <button className="btn btn-dark mt-3" type="submit">
             Submit
           </button>
+          <button className="btn btn-dark mt-3 ml-2" type="button" onClick={navigateToGraph}>
+            Graph
+          </button>
         </form>
-        <div className="uploaded">
+        {/* <div className="uploaded">
           <h4>Uploaded PDF:</h4>
           <div className="output-div">
             {allImage == null
@@ -186,7 +202,7 @@ const UploadPDF = () => {
                   );
                 })}
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

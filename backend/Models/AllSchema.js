@@ -1,3 +1,4 @@
+const { text } = require('body-parser');
 let mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -6,20 +7,26 @@ const UserSchema = new mongoose.Schema({
 });
 
 const pdfDetailsSchema = new mongoose.Schema({
-    pdf: String,
-    title: String,
+    pdf:String,
+    title:String,
 }
 );
+
 const videoDetailsSchema = new mongoose.Schema({
-    video: String,
-    title: String,
+    video:String,
+    title:String,
 
-})
+});
 
-const Video = mongoose.model('Video', videoDetailsSchema);
 
+
+const Video= mongoose.model('Video', videoDetailsSchema);
 const User = mongoose.model('User', UserSchema);
-const Pdf = mongoose.model("PdfDetails", pdfDetailsSchema);
+const Pdf = mongoose.model("PdfDetails",pdfDetailsSchema);
 
 
-module.exports = { User, Pdf,Video };
+
+
+
+
+module.exports ={User,Pdf,Video};

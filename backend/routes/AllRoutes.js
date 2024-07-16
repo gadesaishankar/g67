@@ -17,7 +17,7 @@
 // allroutes.use("/files", express.static("files"));
 // allroutes.use("/videos", express.static("videos"));
 
-// ffmpeg.setFfmpegPath('C:/Users/SAINATH/Downloads/ffmpeg-7.0.1-full_build/ffmpeg-7.0.1-full_build/bin/ffmpeg.exe'); // Adjust the path as needed
+// ffmpeg.setFfmpegPath('C:/Users/Nagender/Downloads/ffmpeg-7.0.1-full_build/ffmpeg-7.0.1-full_build/bin/ffmpeg.exe'); // Adjust the path as needed); // Adjust the path as needed
 
 // const convertPdfToText = async (pdfPath) => {
 //     try {
@@ -68,7 +68,7 @@
 //     try {
 //         const response = await axios.post("https://api.assemblyai.com/v2/upload", formData, {
 //             headers: {
-//                 "authorization": assemblyaiKey,
+//                 "authorization": "443e85486085485189193ac8a9867902",
 //                 ...formData.getHeaders(),
 //             },
 //         });
@@ -85,7 +85,7 @@
 //     try {
 //         const response = await axios.post("https://api.assemblyai.com/v2/transcript", config, {
 //             headers: {
-//                 "authorization": assemblyaiKey,
+//                 "authorization": "443e85486085485189193ac8a9867902",
 //             },
 //         });
 //         const transcriptId = response.data.id;
@@ -94,7 +94,7 @@
 //         while (true) {
 //             const transcriptResponse = await axios.get(`https://api.assemblyai.com/v2/transcript/${transcriptId}`, {
 //                 headers: {
-//                     "authorization": assemblyaiKey,
+//                     "authorization": "443e85486085485189193ac8a9867902",
 //                 },
 //             });
 //             transcript = transcriptResponse.data;
@@ -131,11 +131,6 @@
 //         throw error;
 //     }
 // };
-
-// allroutes.get("/", (req, res) => {
-//     console.log("reached root");
-//     res.send("welcome to dune lms");
-// });
 
 // // Login route
 // allroutes.post("/login", async (req, res) => {
@@ -200,7 +195,11 @@
 //         if (req.app.locals.videoTextFilePath) {
 //             const similarity = await sendFilesToFlaskServer(req.app.locals.pdfTextFilePath, req.app.locals.videoTextFilePath, "calculate_similarity");
 //             res.json({ status: "ok", similarity: similarity });
+//             req.app.locals.similarity = similarity; 
 //             console.log("similarity:" , similarity);
+
+
+
 //         } else {
 //             res.json({ status: "ok", message: "PDF uploaded and processed" });
 //         }
@@ -209,7 +208,23 @@
 //         res.status(500).json({ status: "error", message: "Failed to upload file" });
 //     }
 // });
+// allroutes.get('/api/calculate_similarity', async (req, res) => {
+//     try {
+//         const similarity = req.app.locals.similarity; // Ensure this has the correct value
+//         console.log('Similarity score:', similarity); // Debugging line
+//         if (similarity !== undefined) {
+//             res.json({ similarity });
+//         } else {
+//             res.status(404).json({ error: 'Similarity score not found' });
+//         }
+//     } catch (error) {
+//         console.error('Error fetching similarity score:', error);
+//         res.status(500).json({ error: 'Failed to fetch similarity score' });
+//     }
+// });
 
+
+  
 // allroutes.get("/getfiles", async (req, res) => {
 //     try {
 //         Pdf.find({}).then((data) => {
@@ -286,7 +301,8 @@
 
 // module.exports = allroutes;
 const express = require("express");
-const { User, Pdf, Video } = require("./allSchema");
+require('dotenv').config();
+const { User, Pdf, Video } = require("../Models/AllSchema");
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
@@ -303,7 +319,6 @@ allroutes.use("/files", express.static("files"));
 allroutes.use("/videos", express.static("videos"));
 
 ffmpeg.setFfmpegPath('C:/Users/Nagender/Downloads/ffmpeg-7.0.1-full_build/ffmpeg-7.0.1-full_build/bin/ffmpeg.exe'); // Adjust the path as needed
-
 const convertPdfToText = async (pdfPath) => {
     try {
         const dataBuffer = fs.readFileSync(pdfPath);
@@ -345,19 +360,18 @@ const convertVideoToAudio = (inputVideo, outputAudio) => {
     });
 };
 
+const assemblyaiKey = process.env.ASSEMBLYAI_KEY;
 const uploadAudioToAssemblyAI = async (filePath) => {
     const formData = new FormData();
     formData.append("audio", fs.createReadStream(filePath));
 
     try {
-     
         const response = await axios.post("https://api.assemblyai.com/v2/upload", formData, {
             headers: {
                 "authorization": "443e85486085485189193ac8a9867902",
                 ...formData.getHeaders(),
             },
         });
-        console.log("ajdg");
         return response.data.upload_url;
     } catch (error) {
         console.error("Error uploading audio to AssemblyAI:", error);
@@ -380,31 +394,43 @@ const transcribeAudioToText = async (audioUrl) => {
         while (true) {
             const transcriptResponse = await axios.get(`https://api.assemblyai.com/v2/transcript/${transcriptId}`, {
                 headers: {
-                "authorization": "443e85486085485189193ac8a9867902",
-            },
-      });
-        transcript = transcriptResponse.data;
+                    "authorization": "443e85486085485189193ac8a9867902",
+                },
+            });
+            transcript = transcriptResponse.data;
 
-        if (transcript.status === "completed") {
-            break;
-        } else if (transcript.status === "failed") {
-            throw new Error("Transcription failed");
+            if (transcript.status === "completed") {
+                break;
+            } else if (transcript.status === "failed") {
+                throw new Error("Transcription failed");
+            }
+
+            await new Promise((resolve) => setTimeout(resolve, 5000));
         }
 
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        return transcript.text;
+    } catch (error) {
+        console.error("Error transcribing audio to text:", error);
+        throw error;
     }
-
-    return transcript.text;
-} catch (error) {
-    console.error("Error transcribing audio to text:", error);
-    throw error;
-}
 };
 
-allroutes.get("/", (req, res) => {
-    console.log("reached root");
-    res.send("welcome to dune lms");
-});
+const sendFilesToFlaskServer = async (pdfTextFilePath, videoTextFilePath, endpoint) => {
+    try {
+        const formData = new FormData();
+        formData.append('file1', fs.createReadStream(pdfTextFilePath));
+        formData.append('file2', fs.createReadStream(videoTextFilePath));
+
+        const response = await axios.post(`http://localhost:6000/${endpoint}`, formData, {
+            headers: formData.getHeaders()
+        });
+
+        return response.data.similarity;
+    } catch (error) {
+        console.error("Error sending files to Flask server:", error);
+        throw error;
+    }
+};
 
 // Login route
 allroutes.post("/login", async (req, res) => {
@@ -457,18 +483,31 @@ allroutes.post("/uploadfiles", upload.single("file"), async (req, res) => {
             pdf: fileName,
         });
 
-        const pdfPath = path.join(__dirname, ".", "files", fileName);
+        const pdfPath = path.join(__dirname, "..", "files", fileName);
         const outputTextFileName = fileName.replace(".pdf", ".txt");
-        const outputTextFilePath = path.join(__dirname, ".", "files", outputTextFileName);
+        const outputTextFilePath = path.join(__dirname, "..", "files", outputTextFileName);
         const text = await convertPdfToText(pdfPath);
         await writeFile(outputTextFilePath, text);
+        
+        req.app.locals.pdfTextFilePath = outputTextFilePath;
 
-        res.json({ status: "ok" });
+        // Check if both files are available for sending to Flask server
+        let a=60;
+        if (req.app.locals.videoTextFilePath) {
+            const similarity = await sendFilesToFlaskServer(req.app.locals.pdfTextFilePath, req.app.locals.videoTextFilePath, "calculate_similarity");
+            req.app.locals.similarity=similarity*100;
+            res.json({ status: "ok", similarity: similarity });
+            console.log("similarity:", similarity);
+        } else {
+            res.json({ status: "ok", message: "PDF uploaded and processed" });
+        }
     } catch (error) {
         console.error("Error uploading file:", error);
         res.status(500).json({ status: "error", message: "Failed to upload file" });
     }
 });
+
+
 
 allroutes.get("/getfiles", async (req, res) => {
     try {
@@ -495,8 +534,9 @@ const uploadStorage = multer.diskStorage({
 });
 
 const uploadVideo = multer({ storage: uploadStorage });
-
 allroutes.post("/uploadvideos", uploadVideo.single("file"), async (req, res) => {
+    
+
     console.log(req.file);
     const title = req.body.title;
     const fileName = req.file.filename;
@@ -506,7 +546,7 @@ allroutes.post("/uploadvideos", uploadVideo.single("file"), async (req, res) => 
             video: fileName,
         });
 
-        const videoPath = path.join(__dirname, ".", "videos", fileName);
+        const videoPath = path.join(__dirname, "..", "videos", fileName);
         const outputAudioPath = videoPath.replace(".mp4", ".mp3");
         await convertVideoToAudio(videoPath, outputAudioPath);
 
@@ -514,13 +554,40 @@ allroutes.post("/uploadvideos", uploadVideo.single("file"), async (req, res) => 
         const transcribedText = await transcribeAudioToText(audioUrl);
 
         const outputTextFileName = fileName.replace(".mp4", ".txt");
-        const outputTextFilePath = path.join(__dirname, ".", "videos", outputTextFileName);
+        const outputTextFilePath = path.join(__dirname, "..", "videos", outputTextFileName);
         await writeFile(outputTextFilePath, transcribedText);
 
-        res.json({ status: "ok" });
+        req.app.locals.videoTextFilePath = outputTextFilePath;
+
+        // Check if both files are available for sending to Flask server
+        if (req.app.locals.pdfTextFilePath) {
+            const similarity = await sendFilesToFlaskServer(req.app.locals.pdfTextFilePath, req.app.locals.videoTextFilePath, "calculate_similarity");
+            req.app.locals.similarity= similarity*100; 
+            res.json({ status: "ok", similarity: similarity });
+            console.log("similarity:", similarity);
+        } else {
+            res.json({ status: "ok", message: "Video uploaded and processed" });
+        }
     } catch (error) {
         console.error("Error uploading video:", error);
         res.status(500).json({ status: "error", message: "Failed to upload video" });
+    }
+});
+
+
+allroutes.get('/calculate_similarity', async (req, res) => {
+
+    try {
+        const similarity = req.app.locals.similarity; // Ensure this has the correct value
+        console.log('Similarity score:', similarity); // Debugging line
+        if (similarity !== undefined) {
+            res.json({ similarity });
+        } else {
+            res.status(404).json({ error: 'Similarity score not found' });
+        }
+    } catch (error) {
+        console.error('Error fetching similarity score:', error);
+        res.status(500).json({ error: 'Failed to fetch similarity score' });
     }
 });
 
